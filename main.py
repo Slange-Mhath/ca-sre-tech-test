@@ -50,6 +50,7 @@ deployment = kplus.Deployment(
     metadata=cdk8s.ApiObjectMetadata(
         name="tech-test-deployment",
     ),
+    replicas=5,
 )
 
 # This adds the container definition (for the container which
@@ -79,6 +80,15 @@ deployment.add_container(
             volume=nginx_pid,
         ),
     ],
+    resources=kplus.ContainerResources(
+        # Defines the resources required by the container, which is necessary if we want to run 5 instead of 2 replicas.
+        # https://cdk8s.io/docs/latest/reference/cdk8s-plus-26/python/#resourcesoptional
+        cpu=kplus.CpuResources(
+            # https://cdk8s.io/docs/latest/reference/cdk8s-plus-26/python/#cpuresources
+            limit=kplus.Cpu.millis(400),  # Docker Container has 2 cores = 2000m. 2000 / 5 pods = 400m per pod  
+            request=kplus.Cpu.millis(250), 
+        ),
+    ),
 )
 
 # Every pod has an IP address, which is not static.
