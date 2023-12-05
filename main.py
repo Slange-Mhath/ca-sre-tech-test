@@ -32,7 +32,7 @@ deployment.add_container(
     port=80,
     name="nginx",
     security_context=kplus.ContainerSecurityContextProps(
-        ensure_non_root=False, read_only_root_filesystem=True
+        ensure_non_root=False, read_only_root_filesystem=False
     ),
     volume_mounts=[
         kplus.VolumeMount(
@@ -45,7 +45,7 @@ deployment.add_container(
 service = kplus.Service(
     chart,
     "service",
-    ports=[kplus.ServicePort(port=80, target_port=8080)],
+    ports=[kplus.ServicePort(port=80, target_port=80)],
     type=kplus.ServiceType.NODE_PORT,
     selector=deployment,
     metadata=cdk8s.ApiObjectMetadata(name="tech-test-service"),
