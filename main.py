@@ -18,6 +18,8 @@ config_map = kplus.ConfigMap(
 )
 
 volume = kplus.Volume.from_config_map(chart, "volume", config_map=config_map)
+nginx_client_cash = kplus.Volume.from_empty_dir(chart, id="nginx-client-cash", name="nginx-client-cash")
+nginx_pid = kplus.Volume.from_empty_dir(chart, id="nginx-pid", name="nginx-pid")
 
 deployment = kplus.Deployment(
     chart,
@@ -32,13 +34,21 @@ deployment.add_container(
     port=80,
     name="nginx",
     security_context=kplus.ContainerSecurityContextProps(
-        ensure_non_root=False, read_only_root_filesystem=False
+        ensure_non_root=False, read_only_root_filesystem=True
     ),
     volume_mounts=[
         kplus.VolumeMount(
             path="/usr/share/nginx/html",
             volume=volume,
-        )
+        ),
+        kplus.VolumeMount(
+            path="/var/cache/nginx",
+            volume=nginx_client_cash,
+        ),
+        kplus.VolumeMount(
+            path="/var/run",
+            volume=nginx_pid,
+        ),
     ],
 )
 
