@@ -89,6 +89,14 @@ deployment.add_container(
             request=kplus.Cpu.millis(250), 
         ),
     ),
+    liveness=kplus.Probe.from_http_get(
+        path= "/",
+        failure_threshold=1,
+        initial_delay_seconds=cdk8s.Duration.seconds(10),
+        period_seconds=cdk8s.Duration.seconds(10),
+        timeout_seconds=cdk8s.Duration.seconds(5),
+        port=80,
+    ),
 )
 
 # Every pod has an IP address, which is not static.
