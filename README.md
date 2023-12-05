@@ -49,8 +49,14 @@ You aren't expected to be able to fix every issue and solve every task, just lea
 - [cdk8s-plus-26 Python API reference](https://cdk8s.io/docs/latest/reference/cdk8s-plus-26/python/)
 - [Kubernetes deployment documentation](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 - [Kubernetes probes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-  
+
 ## Tips
 
 - To access the deployed application from the browser, you can run `minikube service <service name>` to expose the service
 - If you have already connected to clusters with kubectl, you may need to switch the context with `kubectl config use-context minikube`
+
+## Solution
+
+1. To test the solution run the `main.py` file and generate the separated Kubernetes manifests, which will be found in `dist/`.
+2. To deploy the manifests to the kubernetes cluster simply run `kubectl apply -f dist`.
+3. Running `minikube service tech-test-service` should now expose the service so that the application can be accessed from the browser.
